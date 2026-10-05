@@ -72,6 +72,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 import {
   downloadEntries,
@@ -82,6 +83,7 @@ import {
 import type { EntryRow } from '@/data/types'
 
 const meta = moduleMeta('threshold')
+const route = useRoute()
 const columns = ["阈值编号", "隐患点编号", "监测类型", "注意级阈值", "警示级阈值", "警戒级阈值", "设定人", "生效状态"]
 const actions = ["发布生效", "调整阈值", "废止配置"]
 const statuses = ["草稿", "已生效", "已调整", "已废止"]
@@ -133,5 +135,12 @@ function reload() {
   }
 }
 
-onMounted(reload)
+onMounted(() => {
+  // 雨量监测页的「关联阈值」入口带 station 参数跳转过来，按隐患点编号预填筛选。
+  const station = String(route.query.station ?? '').trim()
+  if (station) {
+    filters.value = { 隐患点编号: station }
+  }
+  reload()
+})
 </script>
