@@ -27,6 +27,16 @@ export type PageResult = {
   size: number
 }
 
+/** 当前值班身份：乡镇站员只能动本辖区，区县人员只读并负责复核。 */
+export type OperatorRole = 'township' | 'county'
+
+export type OperatorContext = {
+  role: OperatorRole
+  /** 乡镇站员的所属辖区；区县人员为空串 */
+  township: string
+  operator: string
+}
+
 export type ActionResult = {
   ok: boolean
   message: string
